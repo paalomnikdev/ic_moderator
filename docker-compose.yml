@@ -1,0 +1,42 @@
+version: "3.9"
+   
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/python/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    environment:
+      - DEBUG=1
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  redis:
+    image: redis:alpine
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'ic_bot'
+      MYSQL_USER: 'ic_bot'
+      MYSQL_PASSWORD: 'ic_bot'
+      MYSQL_ROOT_PASSWORD: 'ic_bot'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    

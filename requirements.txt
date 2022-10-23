@@ -1,0 +1,10 @@
+asgiref==3.5.2
+Django==4.1.2
+gunicorn==20.1.0
+mysqlclient==2.1.1
+sqlparse==0.4.3
+python-telegram-bot
+python-telegram-bot-pagination==0.0.2
+celery==5.0.5
+redis
+django-celery-beat
